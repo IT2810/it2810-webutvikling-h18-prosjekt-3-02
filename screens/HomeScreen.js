@@ -7,12 +7,32 @@ import {
   Text,
   TouchableOpacity,
   View,
+  TextInput
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
+class UserTextInput extends React.Component{
+  render() {
+    return(
+      <TextInput
+        {...this.props}
+        editable={true}
+        maxLength={40}
+      />
+    )
+  }
+}
+
 export default class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      text: 'If it sounds like a snake, it\'s a misstake',
+    };
+  }
+
   static navigationOptions = {
     header: null,
   };
@@ -41,9 +61,11 @@ export default class HomeScreen extends React.Component {
               <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
             </View>
 
-            <Text style={styles.getStartedText}>
-              If it sounds like a snake it's a mistake!!
-            </Text>
+            <UserTextInput
+              multiline = {true}
+              numberOfLines = {4}
+              onChangeText={(text) => this.setState({text})}
+              value={this.state.text}/>
           </View>
 
           <View style={styles.helpContainer}>
