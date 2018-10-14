@@ -7,20 +7,84 @@ import {
   Text,
   TouchableOpacity,
   View,
+  SectionList,
+  TextInput
 } from 'react-native';
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
 
+class UserTextInput extends React.Component{
+  render() {
+    return(
+      <TextInput
+        {...this.props}
+      />
+    )
+  }
+}
+
+class SectionListBasics extends React.Component {
+    render() {
+        return (
+            <View style={styles.container}>
+                <SectionList
+                    sections = {this.props.sections}
+                    renderItem={({item}) => <Text style={styles.item}>{item}</Text>}
+                    renderSectionHeader={({section}) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+                    renderSectionFooter={() => <Text>--------------------------------------------------</Text>}
+                    keyExtractor={(item, index) => index}
+                />
+            </View>
+        );
+    }
+}
+
 export default class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      notes: [{title: 'stateTest', data: ['HEIEHI']}],
+    };
+  }
+
   static navigationOptions = {
     header: null,
   };
+
+  newNote(text) {
+      let newArr = [{title: 'Test1', data: [text]}];
+      this.setState({notes: [...this.state.notes, ...newArr]});
+
+  }
 
   render() {
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+            <View style={styles.getStartedContainer}>
+                {this._maybeRenderDevelopmentModeWarning()}
+
+                <Text style={styles.getStartedText}>Get started by opening</Text>
+
+                <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
+                    <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
+                </View>
+
+                <UserTextInput
+                    multiline = {true}
+                    defaultValue = {'If it sounds like a snake, it\'s a mistake'}
+                    numberOfLines = {4}
+                    selectTextOnFocus = {true}
+                    onChangeText={(text) => this.newNote(text)}/>
+
+              <SectionListBasics
+                  sections = {
+                     this.state.notes
+                    }
+              />
+            </View>
+
           <View style={styles.welcomeContainer}>
             <Image
               source={
@@ -30,20 +94,6 @@ export default class HomeScreen extends React.Component {
               }
               style={styles.welcomeImage}
             />
-          </View>
-
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-
-            <Text style={styles.getStartedText}>Get started by opening</Text>
-
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-            </View>
-
-            <Text style={styles.getStartedText}>
-              If it sounds like a snake it's a mistake!!
-            </Text>
           </View>
 
           <View style={styles.helpContainer}>
@@ -102,6 +152,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+
   },
   developmentModeText: {
     marginBottom: 20,
@@ -185,4 +236,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
+  sectionHeader: {
+      paddingTop: 2,
+      paddingLeft: 10,
+      paddingRight: 10,
+      paddingBottom: 2,
+      fontSize: 14,
+      fontWeight: 'bold',
+  },
+  item: {
+      padding: 8,
+      fontSize: 18,
+      height: 44,
+      backgroundColor: 'rgba(247,247,247,1.0)',
+  },
+  sectionContentContainer: {
+      borderRadius: 25,
+      borderWidth: 2,
+      borderColor: '#73ad21',
+  }
 });
