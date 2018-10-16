@@ -13,6 +13,7 @@ import {
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
+import Header from "../components/Header/Header";
 
 class UserTextInput extends React.Component{
   render() {
@@ -58,9 +59,14 @@ export default class HomeScreen extends React.Component {
 
   }
 
+  handleOptionPress = () =>{
+      console.log("some message");
+  };
+
   render() {
     return (
       <View style={styles.container}>
+          <Header onPress={this.handleOptionPress()}/>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <View style={styles.getStartedContainer}>
                 {this._maybeRenderDevelopmentModeWarning()}
