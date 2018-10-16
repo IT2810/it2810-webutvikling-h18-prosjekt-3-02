@@ -5,7 +5,8 @@ import {
     View,
     SectionList,
     TextInput,
-    TouchableOpacity
+    TouchableOpacity,
+    Button
 } from 'react-native';
 
 class UserTextInput extends React.Component {
@@ -31,7 +32,7 @@ class MyListItem extends React.PureComponent {
     }
 }
 
-class SectionListBasics extends React.PureComponent {
+class ListWrapper extends React.PureComponent {
     _renderItem = ({item}) => (
         <MyListItem
             text={item}
@@ -69,17 +70,21 @@ export default class HomeScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <ListWrapper
+                    sections={
+                        this.state.notes
+                    }
+                />
+                <Button
+                    title={'New Note'}
+                    onPress={() => console.log('It\'s like right now')}
+                />
                 <UserTextInput
                     multiline={true}
                     placeholder={'If it sounds like a snake, it\'s a mistake'}
                     numberOfLines={4}
                     selectTextOnFocus={true}
                     onEndEditing={(event) => this.newNote(event.nativeEvent.text)}
-                />
-                <SectionListBasics
-                    sections={
-                        this.state.notes
-                    }
                 />
             </View>
         );
