@@ -56,7 +56,7 @@ export default class HomeScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            notes: [{title: 'stateTest', data: ['HEIEHI']}],
+            notes: [],
         };
     }
 
