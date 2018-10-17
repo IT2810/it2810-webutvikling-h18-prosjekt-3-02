@@ -64,13 +64,12 @@ export default class HomeScreen extends React.Component {
     }
 
     newNote(text) {
-        let key = this.state.sectionIndex;
-        let newArr = [{title: '', data: [text], key: key}];
-        Storage.setItem(key.toString, newArr);
-        key += 1;
-        this.setState({sectionIndex: key});
+        let indexKey = this.state.sectionIndex;
+        let newArr = [{title: '', data: [text], key: indexKey}];
+        Storage.setItem(indexKey.toString, newArr);
+        indexKey += 1;
+        this.setState({sectionIndex: indexKey});
         //this.setState({notes: [...this.state.notes, ...newArr]});
-
     }
 
     render() {
