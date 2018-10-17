@@ -5,7 +5,8 @@ import {
     View,
     SectionList,
     TextInput,
-    TouchableOpacity
+    TouchableOpacity,
+    Button
 } from 'react-native';
 
 class UserTextInput extends React.Component {
@@ -69,6 +70,7 @@ export default class HomeScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+
                 <UserTextInput
                     multiline={true}
                     placeholder={'If it sounds like a snake, it\'s a mistake'}
@@ -80,6 +82,10 @@ export default class HomeScreen extends React.Component {
                     sections={
                         this.state.notes
                     }
+                />
+                <Button
+                    title={'New Note'}
+                    onPress={() => console.log(this.state)}
                 />
             </View>
         );
