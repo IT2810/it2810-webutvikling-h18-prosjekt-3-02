@@ -13,7 +13,9 @@ import {
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
-import Header from "../components/Header/Header";
+/*import Header from "../components/Header/Header";*/
+import { Header } from "react-native-elements";
+
 
 class UserTextInput extends React.Component{
   render() {
@@ -59,14 +61,18 @@ export default class HomeScreen extends React.Component {
 
   }
 
-  handleOptionPress = () =>{
-      console.log("some message");
-  };
+  /*handleOptionPress = () =>{
+      console.log("some message, change message");
+  };*/
 
   render() {
     return (
       <View style={styles.container}>
-          <Header onPress={this.handleOptionPress()}/>
+          <Header /*onPress={this.handleOptionPress()}*/
+                  leftComponent={{icon: "menu", color: "#fff"}}
+                  centerComponent={{text: "GeoNotes", style: {color: "#fff"}}}
+                  outerContainerStyles={{backgroundColor: "#E62117"}}
+          />
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
             <View style={styles.getStartedContainer}>
                 {this._maybeRenderDevelopmentModeWarning()}
