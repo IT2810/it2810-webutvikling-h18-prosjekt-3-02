@@ -11,6 +11,7 @@ import {
     TextInput,
     TouchableOpacity,
     Button,
+    AsyncStorage
 } from 'react-native';
 
 class UserTextInput extends React.Component {
@@ -69,23 +70,35 @@ export default class HomeScreen extends React.Component {
     newNote(text) {
         let indexKey = this.state.sectionIndex;
         let newArr = [{title: '', data: [text], key: indexKey.toString()}];
-        setItem(indexKey.toString(), newArr);
+        AsyncStorage.setItem(indexKey.toString(), JSON.stringify(newArr));
         indexKey += 1;
         this.setState({sectionIndex: indexKey});
         //this.setState({notes: [...this.state.notes, ...newArr]});
     }
 
-    getSections() {
+    async getSections() {
         let sectionArray = [];
-        let i;
-        let getValues = '';
-        for (i=0; i < this.state.sectionIndex; i++) {
-            getValues = async () => {
-                const promise = await getItem(i.toString()).then((result) => sectionArray.push(result))
-            }
-        }
-        console.log(sectionArray);
-        return sectionArray;
+        AsyncStorage.getAllKeys((err, keys) => {
+            AsyncStorage.multiGet(keys, (err, stores) => {
+                stores.map((result, i, store) => {
+                    let value = JSON.parse(store[i][1]);
+                    sectionArray.push(value)
+                    //console.log('1');
+                    //console.log(sectionArray[0])
+                })
+            });
+        });
+       return sectionArray;
+    }
+
+     async deleteAllNotes() {
+        console.log('ok');
+        console.log(await this.getSections());
+        // AsyncStorage.getAllKeys((err, keys) => {
+        //     AsyncStorage.multiRemove(keys, (err) => {
+        //         this.setState({sectionIndex: 0})
+        //     })
+        // });
     }
 
     render() {
@@ -93,13 +106,13 @@ export default class HomeScreen extends React.Component {
             <View style={styles.container}>
                 <ListWrapper
                     sections={
-                        //this.state.notes
-                        this.getSections()
+                        this.state.notes
+                        //this.getSections()
                     }
                 />
                 <Button
-                    title={'New Note'}
-                    onPress={() => console.log(this.state)}
+                    title={'Delete all notes'}
+                    onPress={() => this.deleteAllNotes()}
                 />
                 <UserTextInput
                     multiline={true}
