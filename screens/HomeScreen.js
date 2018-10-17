@@ -1,5 +1,8 @@
 import React from 'react';
-import Storage from 'services/Storage'
+import {
+    setItem,
+    getItem
+} from '../services/Storage'
 import {
     StyleSheet,
     Text,
@@ -23,7 +26,7 @@ class UserTextInput extends React.Component {
 class MyListItem extends React.PureComponent {
     render() {
         return (
-            <TouchableOpacity onPress={() => console.log('WOW')}>
+            <TouchableOpacity onPress={() => console.log(this.key)}>
                 <Text
                     style={styles.item}>
                     {this.props.text}
@@ -65,11 +68,24 @@ export default class HomeScreen extends React.Component {
 
     newNote(text) {
         let indexKey = this.state.sectionIndex;
-        let newArr = [{title: '', data: [text], key: indexKey}];
-        Storage.setItem(indexKey.toString, newArr);
+        let newArr = [{title: '', data: [text], key: indexKey.toString()}];
+        setItem(indexKey.toString(), newArr);
         indexKey += 1;
         this.setState({sectionIndex: indexKey});
         //this.setState({notes: [...this.state.notes, ...newArr]});
+    }
+
+    getSections() {
+        let sectionArray = [];
+        let i;
+        let getValues = '';
+        for (i=0; i < this.state.sectionIndex; i++) {
+            getValues = async () => {
+                const promise = await getItem(i.toString()).then((result) => sectionArray.push(result))
+            }
+        }
+        console.log(sectionArray);
+        return sectionArray;
     }
 
     render() {
@@ -77,7 +93,8 @@ export default class HomeScreen extends React.Component {
             <View style={styles.container}>
                 <ListWrapper
                     sections={
-                        this.state.notes
+                        //this.state.notes
+                        this.getSections()
                     }
                 />
                 <Button
