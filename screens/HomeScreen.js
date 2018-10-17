@@ -1,4 +1,5 @@
 import React from 'react';
+import Storage from 'services/Storage'
 import {
     StyleSheet,
     Text,
@@ -6,7 +7,7 @@ import {
     SectionList,
     TextInput,
     TouchableOpacity,
-    Button
+    Button,
 } from 'react-native';
 
 class UserTextInput extends React.Component {
@@ -58,12 +59,17 @@ export default class HomeScreen extends React.Component {
         super(props);
         this.state = {
             notes: [],
+            sectionIndex: 0
         };
     }
 
     newNote(text) {
-        let newArr = [{title: '', data: [text]}];
-        this.setState({notes: [...this.state.notes, ...newArr]});
+        let key = this.state.sectionIndex;
+        let newArr = [{title: '', data: [text], key: key}];
+        Storage.setItem(key.toString, newArr);
+        key += 1;
+        this.setState({sectionIndex: key});
+        //this.setState({notes: [...this.state.notes, ...newArr]});
 
     }
 
@@ -77,7 +83,7 @@ export default class HomeScreen extends React.Component {
                 />
                 <Button
                     title={'New Note'}
-                    onPress={() => console.log('It\'s like right now')}
+                    onPress={() => console.log(this.state)}
                 />
                 <UserTextInput
                     multiline={true}
