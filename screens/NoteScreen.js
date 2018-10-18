@@ -3,10 +3,22 @@ import {
     TextInput,
     StyleSheet,
     View,
-    Button
+    Button,
+    AsyncStorage,
+    KeyboardAvoidingView
 } from 'react-native';
 
 export default class NoteScreen extends React.Component {
+
+    title = ''
+    note = ''
+    indexCounter = 0
+
+    newNote() {
+        let newArr = [{title: this.title, data: [this.text], key: this.indexCounter}];
+        AsyncStorage.setItem(this.indexCounter.toString(), JSON.stringify(newArr));
+        this.indexCounter += 1;
+}
 
     render() {
         return (
@@ -14,18 +26,20 @@ export default class NoteScreen extends React.Component {
                 <TextInput
                     style={styles.titleContainer}
                     placeholder={'Title'}
+                    onChangeText={(text) => this.title = text}
                 />
                 <TextInput
                     style={styles.noteContainer}
                     placeholder={'Take a note young Skywalker'}
                     underlineColorAndroid={'transparent'}
                     multiline={true}
+                    onChangeText={(text) => this.note = text}
 
                 />
-                <View style={{flexDirection: 'row'}}>
+                <KeyboardAvoidingView style={styles.buttonContainer} behavior="padding" enabled>
                     <View style={{flex:1 , marginRight:10}}>
                         <Button
-                            onPress={() => console.log('When did this turn into beautiful world???')}
+                            onPress={() => this.newNote()}
                             title="Submit"
                             color="#15846f"
                         />
@@ -37,7 +51,7 @@ export default class NoteScreen extends React.Component {
                             color="#aa3206"
                         />
                     </View>
-                </View>
+                </KeyboardAvoidingView>
             </View>
         )
 
@@ -59,8 +73,8 @@ const styles = StyleSheet.create({
        paddingLeft: 10,
        fontSize: 16,
    },
-   submitContainer: {
-       paddingLeft: 10
+   buttonContainer: {
+       flexDirection: 'row',
    },
    deleteContainer: {
        paddingRight: 10
