@@ -1,11 +1,14 @@
 import React from 'react';
+
 import {
     StyleSheet,
     Text,
     View,
     SectionList,
     TextInput,
-    TouchableOpacity
+    TouchableOpacity,
+    Button,
+    AsyncStorage
 } from 'react-native';
 
 class UserTextInput extends React.Component {
@@ -21,7 +24,7 @@ class UserTextInput extends React.Component {
 class MyListItem extends React.PureComponent {
     render() {
         return (
-            <TouchableOpacity onPress={() => console.log('WOW')}>
+            <TouchableOpacity onPress={() => console.log(this.key)}>
                 <Text
                     style={styles.item}>
                     {this.props.text}
@@ -31,7 +34,7 @@ class MyListItem extends React.PureComponent {
     }
 }
 
-class SectionListBasics extends React.PureComponent {
+class ListWrapper extends React.PureComponent {
     _renderItem = ({item}) => (
         <MyListItem
             text={item}
@@ -57,29 +60,64 @@ export default class HomeScreen extends React.Component {
         super(props);
         this.state = {
             notes: [],
+            sectionIndex: 0
         };
     }
 
+    indexCounter = 0
+
     newNote(text) {
-        let newArr = [{title: '', data: [text]}];
-        this.setState({notes: [...this.state.notes, ...newArr]});
+        let newArr = [{title: '', data: [text], key: this.indexCounter}];
+        AsyncStorage.setItem(this.indexCounter.toString(), JSON.stringify(newArr));
+        this.indexCounter += 1;
+        this.sectionGetter();
+        //this.setState({notes: [...this.state.notes, ...newArr]});
+    }
+
+    async getSections() {
+        let sectionArray = [];
+         for (let i = 0; i<this.indexCounter; i++) {
+           const value = await AsyncStorage.getItem(i.toString());
+           if (value !== null) {
+             sectionArray.push(JSON.parse(value)[0]);
+           }
+        }
+       return sectionArray;
+    }
+
+    async sectionGetter() {
+      let sec = await this.getSections();
+      this.setState({notes: sec});
 
     }
+
+     deleteAllNotes() {
+        AsyncStorage.getAllKeys((err, keys) => {
+            AsyncStorage.multiRemove(keys, (err) => {
+              this.indexCounter = 0
+            })
+        });
+        this.sectionGetter();
+     }
 
     render() {
         return (
             <View style={styles.container}>
+                <ListWrapper
+                    sections={
+                        this.state.notes
+                    }
+                />
+                <Button
+                    title={'Delete all notes'}
+                    onPress={() => this.deleteAllNotes()}
+                />
                 <UserTextInput
                     multiline={true}
                     placeholder={'If it sounds like a snake, it\'s a mistake'}
                     numberOfLines={4}
                     selectTextOnFocus={true}
                     onEndEditing={(event) => this.newNote(event.nativeEvent.text)}
-                />
-                <SectionListBasics
-                    sections={
-                        this.state.notes
-                    }
                 />
             </View>
         );
