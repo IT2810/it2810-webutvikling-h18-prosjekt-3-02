@@ -1,6 +1,7 @@
 import React,{ Component } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View} from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
+import { Header } from "react-native-elements";
 //import AppNavigator from './navigation/AppNavigator';
 import HomeScreen from "./screens/HomeScreen";
 
@@ -22,6 +23,10 @@ export default class App extends Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          <Header
+              centerComponent={{ text: 'GeoNote', style: { color: '#fff' } }}
+              outerContainerStyles={{backgroundColor: "#15846F"}}
+          />
           <HomeScreen />
         </View>
       );
