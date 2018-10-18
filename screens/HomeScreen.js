@@ -67,39 +67,48 @@ export default class HomeScreen extends React.Component {
         };
     }
 
+    indexCounter = 0
+
     newNote(text) {
-        let indexKey = this.state.sectionIndex;
-        let newArr = [{title: '', data: [text], key: indexKey.toString()}];
-        AsyncStorage.setItem(indexKey.toString(), JSON.stringify(newArr));
-        indexKey += 1;
-        this.setState({sectionIndex: indexKey});
+      console.log('første hei')
+        let newArr = [{title: '', data: [text], key: this.indexCounter}];
+        AsyncStorage.setItem(this.indexCounter.toString(), JSON.stringify(newArr));
+        this.indexCounter += 1;
+        this.setState({sectionIndex: this.indexCounter});
+        console.log('første index: ', this.state.sectionIndex, 'Index key er', this.indexCounter)
+        this.sectionGetter();
+        console.log('HEI')
         //this.setState({notes: [...this.state.notes, ...newArr]});
     }
 
     async getSections() {
         let sectionArray = [];
-        AsyncStorage.getAllKeys((err, keys) => {
-            AsyncStorage.multiGet(keys, (err, stores) => {
-                stores.map((result, i, store) => {
-                    let value = JSON.parse(store[i][1]);
-                    sectionArray.push(value)
-                    //console.log('1');
-                    //console.log(sectionArray[0])
-                })
-            });
-        });
+        console.log(this.state.sectionIndex)
+         for (let i = 0; i<this.indexCounter; i++) {
+           console.log('loop');
+           const value = await AsyncStorage.getItem(i.toString());
+           if (value !== null) {
+             sectionArray.push(JSON.parse(value)[0]);
+           }
+        }
+        console.log(sectionArray);
        return sectionArray;
     }
 
-     async deleteAllNotes() {
-        console.log('ok');
-        console.log(await this.getSections());
-        // AsyncStorage.getAllKeys((err, keys) => {
-        //     AsyncStorage.multiRemove(keys, (err) => {
-        //         this.setState({sectionIndex: 0})
-        //     })
-        // });
+    async sectionGetter() {
+      let sec = await this.getSections();
+      this.setState({notes: sec});
+
     }
+
+     deleteAllNotes() {
+        AsyncStorage.getAllKeys((err, keys) => {
+            AsyncStorage.multiRemove(keys, (err) => {
+              this.indexCounter = 0
+            })
+        });
+        this.sectionGetter();
+     }
 
     render() {
         return (
@@ -107,7 +116,6 @@ export default class HomeScreen extends React.Component {
                 <ListWrapper
                     sections={
                         this.state.notes
-                        //this.getSections()
                     }
                 />
                 <Button
