@@ -82,6 +82,24 @@ For å lagre notes så lagrer vi tittel og data i et section object, også sette
     }
 ```
 
+## Hvordan bruke GPS i React
+
+```javascript
+_getLocationAsync = async () => {
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+            this.setState({
+                errorMessage: 'Permission to access location was denied',
+            });
+        }
+        let location = await Location.getCurrentPositionAsync({});
+        let point = await {
+            lat: location['coords']['latitude'],
+            lng: location['coords']['longitude']
+        };
+```
+
+For å få tilgang til lokasjon på en mobil må man først spørre om tillatelse. Gitt at man får det kan man da spørre om lokasjon gjennom Expo sitt location bibliotek. Det man må være obs på som vi brukte litt tid til å finne ut av er at man får tilbake nøstede objekter. Så man må først inn på nøkkel 'coords' for å finne lengdegrad og breddegrad. 
 
 ## Bruk av GitHub  
 Vi som alltid brukt GitHub på dette prosjektet. Det har fungert fint. Vi åpnet feature branches til alle deler av koden og merget disse tilbake i develop når vi var ferdige. Når GitHub ikke klarte å automatisk merge brukte vi mergeren som er bygget inn i WebStorm. Vi koblet branches og commits mot issues for å holde styr på hvem som gjorde hva, og hva som måtte gjøres. 
