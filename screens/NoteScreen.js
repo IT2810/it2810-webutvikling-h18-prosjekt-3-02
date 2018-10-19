@@ -8,20 +8,34 @@ import {
     KeyboardAvoidingView
 } from 'react-native';
 
+
 export default class NoteScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      sTitle: '',
+      sNote: ''
+    };
+  }
+
+  componentDidMount() {
+    if (this.props.key !== null) {
+
+    }
+  }
 
     title = ''
     note = ''
-    indexCounter = 0
 
-    newNote() {
-        let newArr = [{title: this.title, data: [this.text], key: this.indexCounter}];
-        AsyncStorage.setItem(this.indexCounter.toString(), JSON.stringify(newArr));
-        this.indexCounter += 1;
-}
+    newNote(index) {
+        let newArr = [{title: this.title, data: [this.note], key: index}];
+        AsyncStorage.setItem(index.toString(), JSON.stringify(newArr));
+    }
 
     render() {
-        return (
+      const {navigate} = this.props.navigation;
+      const index = this.props.navigation.getParam('index', 0)
+      return (
             <View>
                 <TextInput
                     style={styles.titleContainer}
@@ -39,15 +53,18 @@ export default class NoteScreen extends React.Component {
                 <KeyboardAvoidingView style={styles.buttonContainer} behavior="padding" enabled>
                     <View style={{flex:1 , marginRight:10}}>
                         <Button
-                            onPress={() => this.newNote()}
+                            onPress={() => {
+                              this.newNote(index);
+                              navigate('Home')
+                            }}
                             title="Submit"
                             color="#15846f"
                         />
                     </View>
                     <View style={{flex:1}}>
                         <Button
-                            onPress={() => console.log('When did this turn into I love you???')}
-                            title="Delete"
+                            onPress={() => navigate('Home')}
+                            title="Discard"
                             color="#aa3206"
                         />
                     </View>

@@ -1,14 +1,14 @@
 import React from 'react';
-
+import {NavigationEvents} from 'react-navigation'
 import {
-    StyleSheet,
-    Text,
-    View,
-    SectionList,
-    TextInput,
-    TouchableOpacity,
-    Button,
-    AsyncStorage
+  StyleSheet,
+  Text,
+  View,
+  SectionList,
+  TextInput,
+  TouchableOpacity,
+  Button,
+  AsyncStorage, KeyboardAvoidingView,
 } from 'react-native';
 
 class UserTextInput extends React.Component {
@@ -60,11 +60,10 @@ export default class HomeScreen extends React.Component {
         super(props);
         this.state = {
             notes: [],
-            sectionIndex: 0
+            index: 0
         };
     }
 
-    indexCounter = 0
 
     newNote(text) {
         let newArr = [{title: '', data: [text], key: this.indexCounter}];
@@ -74,9 +73,9 @@ export default class HomeScreen extends React.Component {
         //this.setState({notes: [...this.state.notes, ...newArr]});
     }
 
-    async getSections() {
+    async getSections(keys) {
         let sectionArray = [];
-         for (let i = 0; i<this.indexCounter; i++) {
+         for (let i = 0; i<keys; i++) {
            const value = await AsyncStorage.getItem(i.toString());
            if (value !== null) {
              sectionArray.push(JSON.parse(value)[0]);
@@ -86,43 +85,62 @@ export default class HomeScreen extends React.Component {
     }
 
     async sectionGetter() {
-      let sec = await this.getSections();
-      this.setState({notes: sec});
-
+      let sec = [];
+      let keyLength = 3;
+      await AsyncStorage.getAllKeys((err, keys) => {
+        keyLength = keys.length
+      });
+      sec = await this.getSections(keyLength+2)
+      this.setState({notes: sec, index: keyLength});
     }
 
-     deleteAllNotes() {
-        AsyncStorage.getAllKeys((err, keys) => {
+    async deleteAllNotes() {
+       await AsyncStorage.getAllKeys((err, keys) => {
             AsyncStorage.multiRemove(keys, (err) => {
-              this.indexCounter = 0
             })
         });
         this.sectionGetter();
      }
 
+
     render() {
+      const {navigate} = this.props.navigation;
         return (
             <View style={styles.container}>
+              <NavigationEvents
+                onWillFocus={() => this.sectionGetter()}
+              />
                 <ListWrapper
                     sections={
                         this.state.notes
                     }
                 />
-                <Button
-                    title={'Delete all notes'}
-                    onPress={() => this.deleteAllNotes()}
-                />
-                <UserTextInput
-                    multiline={true}
-                    placeholder={'If it sounds like a snake, it\'s a mistake'}
-                    numberOfLines={4}
-                    selectTextOnFocus={true}
-                    onEndEditing={(event) => this.newNote(event.nativeEvent.text)}
-                />
+              <View style={styles.buttonContainer}>
+                <View style={{flex:1 , marginRight:10}}>
+                  <Button
+                      title={'New note'}
+                      color="#15846f"
+                      onPress={() => navigate('NewNote', {index: this.state.index})}
+                  />
+                </View>
+                <View style={{flex:1}}>
+                  <Button title={'Delete all notes'}
+                          color="#aa3206"
+                          onPress={() => this.deleteAllNotes()}/>
+                </View>
+              </View>
+                {/*<UserTextInput*/}
+                    {/*multiline={true}*/}
+                    {/*placeholder={'If it sounds like a snake, it\'s a mistake'}*/}
+                    {/*numberOfLines={4}*/}
+                    {/*selectTextOnFocus={true}*/}
+                    {/*onEndEditing={(event) => this.newNote(event.nativeEvent.text)}*/}
+                {/*/>*/}
             </View>
         );
     }
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -141,5 +159,9 @@ const styles = StyleSheet.create({
         padding: 8,
         fontSize: 18,
         backgroundColor: 'rgba(247,247,247,1.0)',
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      paddingBottom: 50
     },
 });
