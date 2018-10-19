@@ -10,13 +10,6 @@ import {
 
 
 export default class NoteScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      sTitle: '',
-      sNote: ''
-    };
-  }
 
   componentDidMount() {
     if (this.props.key !== null) {

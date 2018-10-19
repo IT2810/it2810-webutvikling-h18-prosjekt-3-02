@@ -3,8 +3,6 @@ import { Platform, StatusBar, StyleSheet, View} from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import { Header } from "react-native-elements";
 import Nav from './navigation/StackNav';
-import HomeScreen from "./screens/HomeScreen";
-
 
 export default class App extends Component {
   state = {

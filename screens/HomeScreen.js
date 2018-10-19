@@ -6,26 +6,15 @@ import {
   Text,
   View,
   SectionList,
-  TextInput,
   TouchableOpacity,
   Button,
   AsyncStorage,
 } from 'react-native';
 
-class UserTextInput extends React.Component {
-    render() {
-        return (
-            <TextInput
-                {...this.props}
-            />
-        )
-    }
-}
-
 class MyListItem extends React.PureComponent {
     render() {
         return (
-            <TouchableOpacity onPress={() => console.log(this.key)}>
+            <TouchableOpacity >
                 <Text
                     style={styles.item}>
                     {this.props.text}
@@ -66,18 +55,9 @@ export default class HomeScreen extends React.Component {
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
       const locationGetter = new Loc();
-      this.setState({inLocation: locationGetter._getLocationAsync()})
-    }
-
-
-    newNote(text) {
-        let newArr = [{title: '', data: [text], key: this.indexCounter}];
-        AsyncStorage.setItem(this.indexCounter.toString(), JSON.stringify(newArr));
-        this.indexCounter += 1;
-        this.sectionGetter();
-        //this.setState({notes: [...this.state.notes, ...newArr]});
+      this.setState({inLocation: await locationGetter._getLocationAsync()})
     }
 
     async getSections(keys) {
@@ -85,7 +65,7 @@ export default class HomeScreen extends React.Component {
          for (let i = 0; i<keys; i++) {
            const value = await AsyncStorage.getItem(i.toString());
            if (value !== null) {
-             let note = JSON.parse(value)[0]
+             let note = JSON.parse(value)[0];
              if(note['key'] || this.state.inLocation) {
               sectionArray.push(note);
              }
@@ -95,12 +75,12 @@ export default class HomeScreen extends React.Component {
     }
 
     async sectionGetter() {
-      let sec = [];
+      let sec;
       let keyLength = 3;
       await AsyncStorage.getAllKeys((err, keys) => {
         keyLength = keys.length
       });
-      sec = await this.getSections(keyLength+2)
+      sec = await this.getSections(keyLength+2);
       this.setState({notes: sec, index: keyLength});
     }
 
@@ -139,13 +119,6 @@ export default class HomeScreen extends React.Component {
                           onPress={() => this.deleteAllNotes()}/>
                 </View>
               </View>
-                {/*<UserTextInput*/}
-                    {/*multiline={true}*/}
-                    {/*placeholder={'If it sounds like a snake, it\'s a mistake'}*/}
-                    {/*numberOfLines={4}*/}
-                    {/*selectTextOnFocus={true}*/}
-                    {/*onEndEditing={(event) => this.newNote(event.nativeEvent.text)}*/}
-                {/*/>*/}
             </View>
         );
     }
