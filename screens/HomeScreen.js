@@ -1,5 +1,6 @@
 import React from 'react';
 import {NavigationEvents} from 'react-navigation'
+import Loc from '../services/Location'
 import {
   StyleSheet,
   Text,
@@ -8,7 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
-  AsyncStorage, KeyboardAvoidingView,
+  AsyncStorage,
 } from 'react-native';
 
 class UserTextInput extends React.Component {
@@ -60,8 +61,14 @@ export default class HomeScreen extends React.Component {
         super(props);
         this.state = {
             notes: [],
-            index: 0
+            index: 0,
+            inLocation: false
         };
+    }
+
+    componentDidMount() {
+      const locationGetter = new Loc();
+      this.setState({inLocation: locationGetter._getLocationAsync()})
     }
 
 
@@ -78,7 +85,10 @@ export default class HomeScreen extends React.Component {
          for (let i = 0; i<keys; i++) {
            const value = await AsyncStorage.getItem(i.toString());
            if (value !== null) {
-             sectionArray.push(JSON.parse(value)[0]);
+             let note = JSON.parse(value)[0]
+             if(note['key'] || this.state.inLocation) {
+              sectionArray.push(note);
+             }
            }
         }
        return sectionArray;
