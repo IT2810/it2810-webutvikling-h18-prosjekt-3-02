@@ -5,7 +5,6 @@ import {
     View,
     Button,
     AsyncStorage,
-    KeyboardAvoidingView
 } from 'react-native';
 
 
@@ -44,7 +43,7 @@ export default class NoteScreen extends React.Component {
                     onChangeText={(text) => this.note = text}
 
                 />
-                <KeyboardAvoidingView style={styles.buttonContainer} behavior="padding" enabled>
+                <View style={styles.buttonContainer} >
                     <View style={{flex:1 , marginRight:10}}>
                         <Button
                             onPress={() => {
@@ -57,12 +56,12 @@ export default class NoteScreen extends React.Component {
                     </View>
                     <View style={{flex:1}}>
                         <Button
-                            onPress={() => console.log(this.unBound)}
+                            onPress={() => navigate('Home')}
                             title="Discard"
                             color="#aa3206"
                         />
                     </View>
-                </KeyboardAvoidingView>
+                </View>
               <Button title={'Only see this note at school'} onPress={() => {this.unBound = false}}/>
             </View>
         )

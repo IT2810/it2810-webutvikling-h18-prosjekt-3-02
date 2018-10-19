@@ -10,7 +10,8 @@
     "test": "node ./node_modules/jest/bin/jest.js --watchAll"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transformIgnorePatterns": ["node_modules/(?!react-native|react-navigation)"]
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
