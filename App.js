@@ -2,13 +2,15 @@ import React,{ Component } from 'react';
 import { Platform, StatusBar, StyleSheet, View} from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import { Header } from "react-native-elements";
-//import AppNavigator from './navigation/AppNavigator';
+import Nav from './navigation/StackNav';
 import HomeScreen from "./screens/HomeScreen";
+
 
 export default class App extends Component {
   state = {
     isLoadingComplete: false,
   };
+
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -23,11 +25,11 @@ export default class App extends Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <Header
-              centerComponent={{ text: 'GeoNote', style: { color: '#fff' } }}
-              outerContainerStyles={{backgroundColor: "#15846F"}}
-          />
-          <HomeScreen />
+          {/*<Header*/}
+              {/*centerComponent={{ text: 'GeoNote', style: { color: '#fff' } }}*/}
+              {/*outerContainerStyles={{backgroundColor: "#15846F"}}*/}
+          {/*/>*/}
+          <Nav screenProps={{index: 0}} />
         </View>
       );
     }
