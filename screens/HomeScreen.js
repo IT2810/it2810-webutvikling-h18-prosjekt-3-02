@@ -61,8 +61,14 @@ export default class HomeScreen extends React.Component {
         super(props);
         this.state = {
             notes: [],
-            index: 0
+            index: 0,
+            inLocation: false
         };
+    }
+
+    componentDidMount() {
+      const locationGetter = new Loc();
+      this.setState({inLocation: locationGetter._getLocationAsync()})
     }
 
 
@@ -79,7 +85,10 @@ export default class HomeScreen extends React.Component {
          for (let i = 0; i<keys; i++) {
            const value = await AsyncStorage.getItem(i.toString());
            if (value !== null) {
-             sectionArray.push(JSON.parse(value)[0]);
+             let note = JSON.parse(value)[0]
+             if(note['key'] || this.state.inLocation) {
+              sectionArray.push(note);
+             }
            }
         }
        return sectionArray;
@@ -106,7 +115,6 @@ export default class HomeScreen extends React.Component {
 
     render() {
       const {navigate} = this.props.navigation;
-      const locationGetter = new Loc();
         return (
             <View style={styles.container}>
               <NavigationEvents
@@ -131,10 +139,6 @@ export default class HomeScreen extends React.Component {
                           onPress={() => this.deleteAllNotes()}/>
                 </View>
               </View>
-              <Button
-                  title={'Get Location'}
-                  onPress={() => locationGetter._getLocationAsync()}
-              />
                 {/*<UserTextInput*/}
                     {/*multiline={true}*/}
                     {/*placeholder={'If it sounds like a snake, it\'s a mistake'}*/}

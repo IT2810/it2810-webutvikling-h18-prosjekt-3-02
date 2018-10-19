@@ -22,11 +22,7 @@ export default class Loc {
             lat: location['coords']['latitude'],
             lng: location['coords']['longitude']
         };
-        if ((point['lat'] > home[0][0] && point['lat'] < home[1][0]) && (point['lng'] > home[1][1] && point['lng'] < home[3][1])) {
-            console.log('Chewie we\'re home')
-        } else {
-            console.log(':(')
-        }
+        return (point['lat'] > home[0][0] && point['lat'] < home[1][0]) && (point['lng'] > home[1][1] && point['lng'] < home[3][1]);
     };
 
 }

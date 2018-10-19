@@ -26,9 +26,10 @@ export default class NoteScreen extends React.Component {
 
     title = ''
     note = ''
+    unBound = true
 
     newNote(index) {
-        let newArr = [{title: this.title, data: [this.note], key: index}];
+        let newArr = [{title: this.title, data: [this.note], key: this.unBound}];
         AsyncStorage.setItem(index.toString(), JSON.stringify(newArr));
     }
 
@@ -63,12 +64,13 @@ export default class NoteScreen extends React.Component {
                     </View>
                     <View style={{flex:1}}>
                         <Button
-                            onPress={() => navigate('Home')}
+                            onPress={() => console.log(this.unBound)}
                             title="Discard"
                             color="#aa3206"
                         />
                     </View>
                 </KeyboardAvoidingView>
+              <Button title={'Only see this note at school'} onPress={() => {this.unBound = false}}/>
             </View>
         )
 
@@ -92,6 +94,7 @@ const styles = StyleSheet.create({
    },
    buttonContainer: {
        flexDirection: 'row',
+     paddingBottom: 50
    },
    deleteContainer: {
        paddingRight: 10
