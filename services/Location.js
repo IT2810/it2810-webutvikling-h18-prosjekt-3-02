@@ -1,11 +1,11 @@
 import { Constants, Location, Permissions } from 'expo';
 import * as GeoFencing from "react-native-geo-fencing";
 //import home from '../constants/Polygon'
-const home = [
-    [59.992214, 10.899887],
-    [59.994523, 10.899887],
-    [59.994523, 10.905118],
-    [59.992214, 10.905118],
+const glos = [
+    [63.413432, 10.396839],
+    [63.420896, 10.396839],
+    [63.420896, 10.410743],
+    [63.413432, 10.410743],
 ];
 
 export default class Loc {
@@ -22,7 +22,7 @@ export default class Loc {
             lat: location['coords']['latitude'],
             lng: location['coords']['longitude']
         };
-        return (point['lat'] > home[0][0] && point['lat'] < home[1][0]) && (point['lng'] > home[1][1] && point['lng'] < home[3][1]);
+        return (point['lat'] > glos[0][0] && point['lat'] < glos[1][0]) && (point['lng'] > glos[1][1] && point['lng'] < glos[3][1]);
     };
 
 }
