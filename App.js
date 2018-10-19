@@ -1,12 +1,14 @@
-import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import React,{ Component } from 'react';
+import { Platform, StatusBar, StyleSheet, View} from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
-import AppNavigator from './navigation/AppNavigator';
+import { Header } from "react-native-elements";
+import Nav from './navigation/StackNav';
 
-export default class App extends React.Component {
+export default class App extends Component {
   state = {
     isLoadingComplete: false,
   };
+
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -21,7 +23,11 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
+          {/*<Header*/}
+              {/*centerComponent={{ text: 'GeoNote', style: { color: '#fff' } }}*/}
+              {/*outerContainerStyles={{backgroundColor: "#15846F"}}*/}
+          {/*/>*/}
+          <Nav screenProps={{index: 0}} />
         </View>
       );
     }
