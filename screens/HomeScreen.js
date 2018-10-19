@@ -1,5 +1,6 @@
 import React from 'react';
 import {NavigationEvents} from 'react-navigation'
+import Loc from '../services/Location'
 import {
   StyleSheet,
   Text,
@@ -8,7 +9,7 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
-  AsyncStorage, KeyboardAvoidingView,
+  AsyncStorage,
 } from 'react-native';
 
 class UserTextInput extends React.Component {
@@ -105,6 +106,7 @@ export default class HomeScreen extends React.Component {
 
     render() {
       const {navigate} = this.props.navigation;
+      const locationGetter = new Loc();
         return (
             <View style={styles.container}>
               <NavigationEvents
@@ -129,6 +131,10 @@ export default class HomeScreen extends React.Component {
                           onPress={() => this.deleteAllNotes()}/>
                 </View>
               </View>
+              <Button
+                  title={'Get Location'}
+                  onPress={() => locationGetter._getLocationAsync()}
+              />
                 {/*<UserTextInput*/}
                     {/*multiline={true}*/}
                     {/*placeholder={'If it sounds like a snake, it\'s a mistake'}*/}

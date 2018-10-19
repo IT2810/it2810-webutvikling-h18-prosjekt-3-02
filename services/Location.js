@@ -1,16 +1,14 @@
-import React, { Component } from 'react';
-import { Platform, Text, View, StyleSheet } from 'react-native';
 import { Constants, Location, Permissions } from 'expo';
+import * as GeoFencing from "react-native-geo-fencing";
+//import home from '../constants/Polygon'
+const home = [
+    [59.992214, 10.899887],
+    [59.994523, 10.899887],
+    [59.994523, 10.905118],
+    [59.992214, 10.905118],
+];
 
-export default class App extends Component {
-    state = {
-        location: null,
-        errorMessage: null,
-    };
-
-    componentWillMount() {
-        this._getLocationAsync();
-    }
+export default class Loc {
 
     _getLocationAsync = async () => {
         let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -20,36 +18,15 @@ export default class App extends Component {
             });
         }
         let location = await Location.getCurrentPositionAsync({});
-        this.setState({ location });
+        let point = await {
+            lat: location['coords']['latitude'],
+            lng: location['coords']['longitude']
+        };
+        if ((point['lat'] > home[0][0] && point['lat'] < home[1][0]) && (point['lng'] > home[1][1] && point['lng'] < home[3][1])) {
+            console.log('Chewie we\'re home')
+        } else {
+            console.log(':(')
+        }
     };
 
-    render() {
-        let text = 'Waiting..';
-        if (this.state.errorMessage) {
-            text = this.state.errorMessage;
-        } else if (this.state.location) {
-            text = JSON.stringify(this.state.location);
-        }
-
-        return (
-            <View style={styles.container}>
-                <Text style={styles.paragraph}>{text}</Text>
-            </View>
-        );
-    }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingTop: Constants.statusBarHeight,
-        backgroundColor: '#ecf0f1',
-    },
-    paragraph: {
-        margin: 24,
-        fontSize: 18,
-        textAlign: 'center',
-    },
-});
