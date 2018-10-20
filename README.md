@@ -21,6 +21,9 @@ Dersom vi skulle utviklet videre på appen ville vi hatt lyst til å legge til a
 - Kjør npm install
 - Kjør expo start
 
+## Om bruk av appen: 
+Appen har som nevnt funksjonalitet for å begrense notes til et spesifikt sted brukeren kan befinne seg. I vår prototype er dette predefinerte stedet Gløshaugen, Trondheim. Når man klikker på "Only see this note at school"-knappen under laging av en notat kommer det desverre ingen feedback til bruker, men funksjonen fungerer som den skal under testing. Hvis mobilen er innenfor området vil man se noten, og hvis man ikke er det vil man ikke se den. Hvordan vi gjør dette i prototypen er forklart i større detalj lenger nede. 
+
 ## Teknologier:  
 Applikasjonen vår er basert på React Native, og vi har brukt Expo API under utviklingen. Vi lagrer data med AsyncStorage. Vi tester med jest. 
 
@@ -112,6 +115,6 @@ Vi var innstilt på å lage snapshot-tester til alle hoved-components. Disse ble
  const {navigate} = this.props.navigation;
 ```
 
-Når man snapshot-tester så prøver man å mounte en component alene, men i vår app så fungerer ingenting alene. Alt er avhengig av App.js fordi denne kaller stackNavigator-en vår. Vi hadde lyst til å unit-teste, men det er egentlig ingen logikk som ikke enten går mot state eller mot asyncStorage. State kan ikke jest teste, og asyncStorage er vi ikke helt sikre på, men vi fant ikke ut hvordan å gjøre dette siden for å ha storage må den i utgangspunktet kjøres på en enhet. 
+Når man snapshot-tester så prøver man å mounte en component alene, men i vår app så fungerer ingenting alene. Alt er avhengig av App.js fordi denne kaller stackNavigator-en vår. Vi hadde lyst til å unit-teste, men det er egentlig ingen logikk som ikke enten går mot state eller mot asyncStorage. State kan ikke jest teste, og asyncStorage er vi ikke helt sikre på, men vi fant ikke ut hvordan å gjøre dette siden for å ha storage må den i utgangspunktet kjøres på en enhet. Ingen på gruppa vår har en iOS mobil, så testing er gjort over våre tre Andriod-mobiler. Vi passet på å ikke bruke deler av Expo/React Native som var platform-spesifikke så vi håper dette gjør at appen vår også fungerer på en iOS enhet. 
 
 
